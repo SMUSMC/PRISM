@@ -83,7 +83,7 @@ enum __kvm_host_smccc_func {
 	__KVM_HOST_SMCCC_FUNC___pkvm_iommu_register,
 	__KVM_HOST_SMCCC_FUNC___pkvm_iommu_pm_notify,
 	__KVM_HOST_SMCCC_FUNC___pkvm_iommu_finalize,
-	// QQQHHHQQQ +++++++++++++++
+	// prism +++++++++++++++
 	__KVM_HOST_SMCCC_FUNC___hvc_write_memory,
 	__KVM_HOST_SMCCC_FUNC___hvc_protect_memory,
 	__KVM_HOST_SMCCC_FUNC___hvc_create_map_space,
@@ -91,7 +91,7 @@ enum __kvm_host_smccc_func {
 	__KVM_HOST_SMCCC_FUNC___hvc_set_drm_config,
 	__KVM_HOST_SMCCC_FUNC___hvc_isfastboot,
 	__KVM_HOST_SMCCC_FUNC___hvc_temp_test,
-	// QQQHHHQQQ ---------------
+	// prism ---------------
 };
 
 #define DECLARE_KVM_VHE_SYM(sym)	extern char sym[]

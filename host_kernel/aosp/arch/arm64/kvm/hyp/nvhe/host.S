@@ -247,7 +247,7 @@ SYM_CODE_START(__kvm_hyp_host_forward_smc)
 	ret
 SYM_CODE_END(__kvm_hyp_host_forward_smc)
 
-// QQQHHHQQQ ++++++++++++
+// prism ++++++++++++
 SYM_CODE_START(VAToPA_EL1)
 	AT 		S1E1R, x0
 	MRS 	x0, PAR_EL1
@@ -294,10 +294,10 @@ SYM_CODE_START(VAToPA_EL0)
 	MRS 	x0, PAR_EL1
 	ret
 SYM_CODE_END(VAToPA_EL0)
-// QQQHHHQQQ -----------
+// prism -----------
 
 
-//chenchenchen
+//prism
 SYM_CODE_START(getVTCR_EL2)
 	MRS 	x0, VTCR_EL2
 	ret
@@ -335,4 +335,4 @@ SYM_CODE_START(get_cntfrq)
 	ret
 SYM_CODE_END(get_cntfrq)
 
-//chenchenchen
+//prism

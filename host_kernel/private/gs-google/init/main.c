@@ -107,9 +107,9 @@
 #include <asm/sections.h>
 #include <asm/cacheflush.h>
 
-// QQQHHHQQQ +++++
+// prism +++++
 #include <linux/kvm_host.h>
-// QQQHHHQQQ -----
+// prism -----
 
 
 #define CREATE_TRACE_POINTS
@@ -658,7 +658,7 @@ static void __init setup_command_line(char *command_line)
 
 		strcpy(saved_command_line + len, extra_init_args);
 	}
-	// QQQHHHQQQ +++++++++
+	// prism +++++++++
 	{
 		unsigned long isFastboot = 1 ;
 		unsigned char kernelCMD[] = 
@@ -670,7 +670,7 @@ static void __init setup_command_line(char *command_line)
 		kvm_call_hyp_nvhe(__hvc_isfastboot, (unsigned long)(isFastboot), 1) ;
 
 	}
-	// QQQHHHQQQ ---------
+	// prism ---------
 }
 
 /*

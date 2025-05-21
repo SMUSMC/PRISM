@@ -1050,9 +1050,9 @@ static void handle___pkvm_iommu_finalize(struct kvm_cpu_context *host_ctxt)
 	cpu_reg(host_ctxt, 1) = __pkvm_iommu_finalize();
 }
 
-// QQQHHHQQQ ++++++++++
+// prism ++++++++++
 #include "../../../../../../my-hyp.c"
-// QQQHHHQQQ ----------
+// prism ----------
 
 typedef void (*hcall_t)(struct kvm_cpu_context *);
 
@@ -1091,7 +1091,7 @@ static const hcall_t host_hcall[] = {
 	HANDLE_FUNC(__pkvm_iommu_register),
 	HANDLE_FUNC(__pkvm_iommu_pm_notify),
 	HANDLE_FUNC(__pkvm_iommu_finalize),
-	// QQQHHHQQQ +++++++
+	// prism +++++++
 	HANDLE_FUNC(__hvc_write_memory),
 	HANDLE_FUNC(__hvc_protect_memory),
 	HANDLE_FUNC(__hvc_create_map_space),
@@ -1099,7 +1099,7 @@ static const hcall_t host_hcall[] = {
 	HANDLE_FUNC(__hvc_set_drm_config),
 	HANDLE_FUNC(__hvc_isfastboot),
 	HANDLE_FUNC(__hvc_temp_test),
-	// QQQHHHQQQ -------
+	// prism -------
 };
 
 static inline u64 kernel__text_addr(void)
@@ -1136,11 +1136,11 @@ static void handle_host_hcall(struct kvm_cpu_context *host_ctxt)
 	// u64 elr = read_sysreg_el2(SYS_ELR) - 4;
 	unsigned long hcall_min = 0;
 	hcall_t hfn;
-// QQQHHHQQQ +++++++
+// prism +++++++
 	/* Check for the provenance of the HC */
 	//if (unlikely(elr < kernel__text_addr() || elr >= kernel__etext_addr()))
 	//	goto inval;
-// QQQHHHQQQ -------
+// prism -------
 	/*
 	 * If pKVM has been initialised then reject any calls to the
 	 * early "privileged" hypercalls. Note that we cannot reject

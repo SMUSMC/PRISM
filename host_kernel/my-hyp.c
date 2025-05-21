@@ -1,4 +1,4 @@
-// QQQHHHQQQ ++++++++++
+// prism hyp part functions
 unsigned long VAToPA_EL1(unsigned long va);
 unsigned long VAToPA_EL1_S2(unsigned long va);
 unsigned long getHCR_EL2(void);
@@ -8,7 +8,7 @@ unsigned long VAToPA_EL2_W(unsigned long addr);
 void DrawLock(unsigned char* vaddr, int x, int y, int locked) ;
 void DrawString(unsigned char* vaddr, int x, int y, char* draw_str);
 
-//static unsigned long walkEL2(unsigned long va, unsigned long level) ;
+
 
 #if 0
 	drmdecon0: drmdecon@0x1C240000 {
@@ -193,21 +193,6 @@ typedef struct drm_config_
 	int h_ratio;
 	int v_ratio;
 } drm_config;
-
-/*
- * Multiplies an integer by a fraction, while avoiding unnecessary
- * overflow or loss of precision.
- */
-/*
-#define mult_frac(x, numer, denom) (                    \
-	{                                                   \
-		typeof(x) quot = (x) / (denom);                 \
-		typeof(x) rem = (x) % (denom);                  \
-		(quot * (numer)) + ((rem * (numer)) / (denom)); \
-	})
-*/
-// config->h_ratio = mult_frac(1 << 20, config->src.w, config->dst.w);
-// config->v_ratio = mult_frac(1 << 20, config->src.h, config->dst.h);
 
 static drm_config drm_config_hyp = {
 	0, // dma_iova
@@ -452,14 +437,7 @@ phys_addr_t findPaInprotectList(phys_addr_t va_el1)
 int DataAbortWriteWithCheck(struct kvm_cpu_context *host_ctxt, unsigned long esr, unsigned long far_el2)
 {
 
-	u32 reg_num = (esr >> 16) & 0x1F; // ISS encoding for an exception from a Data Abort,
-									  // DDI0487J_a_a-profile_architecture_reference_manual.pdf, at page 6488
-	// u32 rw = (esr >> 6) & 1 ;				// 0 means read, none 0 means write.
-
-	// u32 size = (esr >> 22) & 0x3 ;
-	// u32 sign_extension = (esr >> 21) & 0x1 ;
-
-	// I will not check rw/size/sign_extension.
+	u32 reg_num = (esr >> 16) & 0x1F; 
 
 	phys_addr_t pa;
 	unsigned int *va_el2 = NULL;
@@ -598,7 +576,6 @@ void handle___hvc_read_memory(struct kvm_cpu_context *host_ctxt)
 	if (va_el1 == 0)
 	{
 		cpu_reg(host_ctxt, 1) = -1;
-		// deniedAddr = 0 ;
 		return;
 	}
 
@@ -626,15 +603,12 @@ void handle___hvc_read_memory(struct kvm_cpu_context *host_ctxt)
 
 		if (va_el2)
 		{
-			// va_el2 = (unsigned int*) ((unsigned long)va_el2 | (va_el1 & 0xfff)) ;
 			cpu_reg(host_ctxt, 1) = (unsigned long)*va_el2;
 		}
 		else
 		{
 			cpu_reg(host_ctxt, 1) = (unsigned long)-3;
 		}
-		// confirm stage-2 is enabled
-		// cpu_reg(host_ctxt, 1) = getHCR_EL2() ;
 	}
 	else
 	{
@@ -691,7 +665,6 @@ static void handle___hvc_temp_test(struct kvm_cpu_context *host_ctxt)
 		break;
 
 	case 1:
-		// L1D_CACHE_REFILL 0x3
 		val = read_sysreg_s(SYS_PMEVCNTRn_EL0(0x3));
 		break;
 
@@ -718,7 +691,6 @@ static void handle___hvc_temp_test(struct kvm_cpu_context *host_ctxt)
 	case 9:
 	{
 		DECLARE_REG(unsigned long, index, host_ctxt, 2);
-		// DECLARE_REG(unsigned long, is_pa, host_ctxt, 3) ;
 		if (index < MAX_PROTECTED_REG_PA)
 		{
 			val = (unsigned long)protectPaList[index];
@@ -783,30 +755,9 @@ static void handle___hvc_temp_test(struct kvm_cpu_context *host_ctxt)
 	case 10:
 	{
 		
-		DECLARE_REG(unsigned long, cnt, host_ctxt, 2);
-		/*
-		DECLARE_REG(unsigned long, lvl, host_ctxt, 3);
-		// unsigned long *l1_va = map_l1_va () ;
-		// val = l1_va[cnt] ;
-		val = walkEL2((unsigned long)&val, 1) ;
-		val = (unsigned long)VAToPA_EL2_W((unsigned long)(&fb_va_el2[cnt])) ;
-
-		if ((val & 0x1) == 0)
-		{
-			val = fb_va_el2[cnt] ;
-			fb_va_el2[cnt] = lvl ;
-		}
-
-		// val = walkEL2((unsigned long)&val, lvl) ;
-
-		//unsigned int* ptr =(unsigned int*)fb_va_el2;
-		//ptr [0] = 0x28000 ;
-		//val = fb_va_el2[cnt] ;
-		*/
-		
+		DECLARE_REG(unsigned long, cnt, host_ctxt, 2);	
 		void DrawLock(unsigned char* vaddr, int x, int y, int locked) ;
 		DrawLock((unsigned char*)fb_va_el2, 0, 0, cnt) ;
-
 		break ;
 	}
 	case 11:
@@ -836,15 +787,12 @@ static void handle___hvc_temp_test(struct kvm_cpu_context *host_ctxt)
 
 void set_win5_size (unsigned long w, unsigned long h)
 {
-
 	drm_config_hyp.src.w = w ;
 	drm_config_hyp.src.f_h = drm_config_hyp.src.h = h ;
-
 	drm_config_hyp.dst.w = w ;
 	drm_config_hyp.dst.f_h = drm_config_hyp.dst.h = h ;
 
 	DrawLock((unsigned char*)fb_va_el2, 0, 0, h==64?0:1) ; //0 unlock 1 locked
-
 }
 
 
@@ -932,74 +880,7 @@ unsigned long* map_fb_to_el2 (phys_addr_t *fb_list, int cnt)
 }
 
 
-/*
-static unsigned long walkEL2(unsigned long va, unsigned long level)
-{
-	unsigned long l1_index, l2_index, l3_index ;
-	unsigned long l1_pte, l2_pte, l3_pte ;
-	unsigned long *l1_oa, l2_pa, *l2_oa, l3_pa, *l3_oa ;
-		
-	va = va & (~0xffff000000000fff) ;
-	l1_index = (va >> 30) & 0x1ff ;
 
-	l1_oa = map_l1_va() ;
-	
-	if (l1_oa)
-	{
-		l1_pte = l1_oa[l1_index] ;
-		
-		if (level == 1)
-			return l1_pte ;
-
-		if ((l1_pte & 0x3) != 0x3)
-		{
-			return 0x2222 ; // not a 2nd level page table entry.
-		}
-
-		l2_pa = l1_pte & l2_base_addr_mask;
-		l2_oa = (unsigned long*) (__pkvm_create_private_mapping(l2_pa, 512*8, PAGE_HYP_DEVICE));
-
-		if (l2_oa)
-		{
-			l2_index = (va & l2_index_mask) >> l2_index_shift ;
-			l2_pte = l2_oa[l2_index] ;
-			
-			if (level == 2)
-				return l2_pte ;
-			
-			if ((l2_pte & 0x3) != 0x3)
-			{
-				return 0x3333 ; // not a 3rd level page table entry.
-			}
-			l3_pa = l2_pte & l3_base_addr_mask;
-			l3_oa = (unsigned long*) (__pkvm_create_private_mapping(l3_pa, 512*8, PAGE_HYP_DEVICE));
-			
-			if (l3_oa)
-			{
-				l3_index = (va & l3_index_mask) >> l3_index_shift;
-				
-				l3_pte = l3_oa[l3_index] ;
-
-				if (level == 3)
-					return l3_pte ;
-
-			} else {
-				return 0x333 ;
-			}
-		}
-		else 
-		{
-			return 0x222 ;
-		}
-	}
-	else
-	{		
-		return 0x111 ;
-	}
-
-		return 0x0 ;
-}
-*/
 typedef struct __block_16X16 {
 	unsigned int head[4] ;
 	unsigned char data[1024] ;
@@ -1015,9 +896,6 @@ static block_16X16 unlock[] = {
 static block_16X16 font[] = {
 	#include "font.h"
 } ;
-
-
-
 
 
 #define BLK_PER_LINE (1088/16)
@@ -1091,11 +969,6 @@ void DrawString(unsigned char* vaddr, int x, int y, char* draw_str) {
 	}
 }
 
-// QQQHHHQQQ ----------
-
-
-
-///chenchenchen
 
 extern unsigned long alias;
 

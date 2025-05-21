@@ -540,13 +540,13 @@ static int host_stage2_adjust_range(u64 addr, struct kvm_mem_range *range)
 int host_stage2_idmap_locked(phys_addr_t addr, u64 size,
 			     enum kvm_pgtable_prot prot, bool update_iommu)
 {
-	// QQQHHHQQQ +++ 
+	// prism
 	if ((addr>=0x1C0B0000UL && addr<0x1C0B6000UL) || ((addr+size)>=0x1C0B0000UL && (addr+size)<0x1C0B6000UL)) {
 		extern phys_addr_t AddtoProtectList(phys_addr_t pa) ;
 		prot = PAGE_HYP_RO ;
 		AddtoProtectList (addr&0xfffUL) ;
 	}
-	// QQQHHHQQQ +++ 	
+	// prism	
 	return host_stage2_try(__host_stage2_idmap, addr, addr + size, prot, update_iommu);
 }
 
@@ -672,12 +672,12 @@ static void host_inject_abort(struct kvm_cpu_context *host_ctxt)
 				 read_sysreg_el1(SYS_SCTLR), PSR_MODE_EL1h);
 	write_sysreg_el2(spsr, SYS_SPSR);
 }
-// QQQHHHQQQ ++++	
+// prism ++++	
 phys_addr_t findPaInprotectList(phys_addr_t va_el1) ;
 phys_addr_t is_FB(phys_addr_t va_el1) ;
 
 extern unsigned long deniedAddr ;
-// QQQHHHQQQ ----
+// prism ----
 void handle_host_mem_abort(struct kvm_cpu_context *host_ctxt)
 {
 	struct kvm_vcpu_fault_info fault;
@@ -689,7 +689,7 @@ void handle_host_mem_abort(struct kvm_cpu_context *host_ctxt)
 
 	addr = (fault.hpfar_el2 & HPFAR_MASK) << 8;
 	
-// QQQHHHQQQ ++++	
+// prism ++++	
 	if (findPaInprotectList(fault.far_el2)) {
 		int ret = 0 ;
 		extern int DataAbortWriteWithCheck (struct kvm_cpu_context *host_ctxt, unsigned long esr, unsigned long far_el2) ;
@@ -703,7 +703,7 @@ void handle_host_mem_abort(struct kvm_cpu_context *host_ctxt)
 		BUG_ON(1) ;
 	}
 
-// QQQHHHQQQ ----
+// prism ----
 
 
 	addr |= fault.far_el2 & FAR_MASK;
@@ -726,12 +726,12 @@ void handle_host_mem_abort(struct kvm_cpu_context *host_ctxt)
 	else
 		BUG_ON(ret && ret != -EAGAIN);
 }
-// QQQHHHQQQ ++++	
+// prism ++++	
 int my_host_stage2_idmap(u64 addr) {
 	return host_stage2_idmap (addr) ;
 }
 
-// QQQHHHQQQ ----
+// prism ----
 /* This corresponds to locking order */
 enum pkvm_component_id {
 	PKVM_ID_HOST,
