@@ -17,6 +17,8 @@ Unzip PrimeApp.zip into the aosp/packages/modules/Virtualization folder. Copy IT
 cp ITestService.aidl ../tests/aidl/com/android/microdroid/testservice
 ```
 
+Due to file upload size limitations, 3 data files (fontkbnpad.h, hybrid.h and white.h) are compressed into native.zip which is found in the src/native folder. Unzip the archive and put the 3 files in the src/native folder.
+
 ## Building
 
 Return to the aosp folder and use the following commands to build the app.
