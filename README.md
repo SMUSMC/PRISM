@@ -53,7 +53,5 @@
     `adb install out/dist/com.android.virt.apex`<br>
     `adb reboot`<br>
 21. **Build Prism Demo App**<br>
-   `TARGET_BUILD_APPS=PrismDemoApp m app_only dist`<br>
-22. **Install Prism Demo App**<br>
-   `adb install -t out/dist/PrismDemoApp.apk`<br>
+   follow the instructions in the PrismApp folder
 
