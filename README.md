@@ -9,7 +9,7 @@
    x is the optional number of threads, which can be set according to the performance of the user's computer. It is recommended to set it to more than 10.  
 6. **merge AOSP folder to AOSP source code**
 7. **build AOSP**  
-   enter AOSP source code folder in Linux Terminal  
+   at AOSP source code folder in Linux Terminal  
    `source build/envsetup.sh`    
    `lunch aosp_panther-userdebug`    
    `export SANITIZE_TARGET=hwaddress`     
@@ -40,16 +40,16 @@
     `fastboot reboot`
 14. **Merge guest_kernel to the guest kernel source code folder**<br>
 15. **Build guest kernel image**<br>
-   in Linux terminal, enter guest kernel source code folder<br>
+    at guest kernel source code folder<br>
     `BUILD_KERNEL=1 ./build_cloudripper.sh`<br>   
 16. **Copy guest kernel image to AOSP folder**  
     `cp out/dist/Image  ~/aosp/kernel/prebuilts/5.10/arm64/kernel-5.10`  
 18. **Merge Virtualization folder to AOSP source code folder**
 19. **Build Microdroid pVM**<br>
-    enter AOSP source code folder<br>
+    at AOSP source code folder<br>
     `banchan com.android.virt aosp_arm64`<br>
     `UNBUNDLED_BUILD_SDKS_FROM_SOURCE=true m apps_only dist`<br> 
-20. **Install Microdroid pVM to Google Pixel 7**
+20. **Install Microdroid pVM to Google Pixel 7**<br>
     `adb install out/dist/com.android.virt.apex`<br>
     `adb reboot`<br>
 21. **Build Prism Demo App**<br>
