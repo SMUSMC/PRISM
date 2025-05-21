@@ -1,0 +1,53 @@
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+android_app {
+    name: "PrismApp",
+    srcs: ["src/java/**/*.java"],
+    resource_dirs: ["res"],
+    static_libs: [
+        "androidx-constraintlayout_constraintlayout",
+        "androidx.appcompat_appcompat",
+        "com.android.microdroid.testservice-java",
+        "com.google.android.material_material",
+    ],
+    libs: [
+        "android.system.virtualmachine",
+    ],
+    jni_libs: ["PrismAppNativeLib"],
+    platform_apis: true,
+    use_embedded_native_libs: true,
+    v4_signature: true,
+}
+
+cc_defaults {
+    name: "PrismAppLibDefaults",
+    srcs: ["src/native/testbinary.cpp"],
+    stl: "libc++_static",
+
+    shared_libs: [
+        "android.security.dice-ndk",
+        "android.system.virtualmachineservice-ndk",
+        "com.android.microdroid.testservice-ndk",
+        "libbase",
+        "libbinder_ndk",
+        "libbinder_rpc_unstable",
+        "PrismAppDraw",
+    ],
+    static_libs: [
+        "libfsverity_digests_proto_cc",
+        "liblog",
+        "libprotobuf-cpp-lite-ndk",
+    ],
+}
+
+cc_library_shared {
+    name: "PrismAppDraw",
+    srcs: ["src/native/draw.cpp"],
+    stl: "libc++_static",
+}
+cc_library_shared {
+    name: "PrismAppNativeLib",
+    defaults: ["PrismAppLibDefaults"],
+}
