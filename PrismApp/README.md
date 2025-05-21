@@ -11,7 +11,7 @@ Go to the aosp folder and run the following commands to setup the environment.
 
 ## File preparation
 
-Unzip PrimeApp.zip into the aosp/packages/modules/Virtualization folder. Copy ITestService.aidl to the "aosp/packages/modules/Virtualization/tests/aidl/com/android/microdroid/testservice" folder by running the following command in the PrimeApp folder
+Copy contents of this folder into the aosp/packages/modules/Virtualization folder. Copy ITestService.aidl to the "aosp/packages/modules/Virtualization/tests/aidl/com/android/microdroid/testservice" folder by running the following command in the PrismApp folder
 
 ```
 cp ITestService.aidl ../tests/aidl/com/android/microdroid/testservice
@@ -29,7 +29,7 @@ UNBUNDLED_BUILD_SDKS_FROM_SOURCE=true TARGET_BUILD_APPS=PrismApp m apps_only dis
 
 ## Installing
 
-Use the following commands to install the app into the phone.
+Follow the instructions to prepare the phone for sideloading. Use the following commands to install the app into the phone.
 
 ```
 adb install -t -g out/dist/PrismApp.apk
