@@ -46,7 +46,7 @@ at host kernel source code folder
     `fastboot reboot`
 ## Merge guest_kernel to the guest kernel source code folder
 ## Build guest kernel image
-//guest kernel use the same version of the host kernel, user can sycn guest kernel source code by following the step 7.  
+//sync guest kernel source code by following the step of sync host kernel.  
 at guest kernel source code folder    
     `BUILD_KERNEL=1 ./build_cloudripper.sh`  
 ## Copy guest kernel image to AOSP folder  
