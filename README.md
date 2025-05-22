@@ -11,7 +11,7 @@
    `repo init -u https://android.googlesource.com/platform/manifest -b android-13.0.0_r11`  
    `repo sync -c -jx`  
    x is the optional number of threads, which can be set according to the performance of the user's computer. It is recommended to set it to more than 10.  
-## Merge AOSP folder to AOSP source code
+## Merge AOSP_modify folder to AOSP source code
 ## build AOSP
    at AOSP source code folder in Linux Terminal  
    `source build/envsetup.sh`    
