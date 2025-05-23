@@ -12,13 +12,13 @@
    `repo sync -c -jx`  
    x is the optional number of threads, which can be set according to the performance of the user's computer. It is recommended to set it to more than 10.  
 ## Merge AOSP_modify folder to AOSP source code
-## build AOSP
+## Build AOSP
    at AOSP source code folder in Linux Terminal  
    `source build/envsetup.sh`    
    `lunch aosp_panther-userdebug`    
    `export SANITIZE_TARGET=hwaddress`     
    `m -jx`    
-## flash AOSP to Pixel 7   
+## Flash AOSP to Pixel 7   
    Enable OEM unlock in developer options.  
    Enable USB debug.  
    `adb reboot bootloader`(or power + V-)  
@@ -51,7 +51,8 @@ at guest kernel source code folder
     `BUILD_KERNEL=1 ./build_cloudripper.sh`  
 ## Copy guest kernel image to AOSP folder  
    `cp out/dist/Image  ~/aosp/kernel/prebuilts/5.10/arm64/kernel-5.10`  
-## Merge Virtualization folder to AOSP source code folder
+## Merge main.rs to MicrodroidManager
+   `cp microdroid_manager/main.rs ~/aosp/packages/modules/Virtualization/microdroid_manager/src/main.rs`  
 ## Build Microdroid pVM
    at AOSP source code folder  
     `banchan com.android.virt aosp_arm64`  
